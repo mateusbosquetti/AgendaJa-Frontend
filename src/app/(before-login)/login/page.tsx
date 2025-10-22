@@ -83,10 +83,10 @@ export default function LoginPage() {
 
         <div className="text-center">
           <Link
-            href="/forgot-password"
+            href="/register"
             className="text-muted-foreground hover:text-foreground text-sm transition-colors"
           >
-            Esqueceu sua senha?
+            Não possui uma conta? Cadastre-se
           </Link>
         </div>
       </div>

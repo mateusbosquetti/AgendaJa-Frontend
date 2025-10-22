@@ -4,22 +4,39 @@ import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import { useState } from "react";
-import { Login } from "@/src/types/login.type";
 import { useRouter } from "next/navigation";
+import { AuthService } from "@/src/services/auth.service";
+import { Register } from "@/src/types/register.type";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [login, setLogin] = useState<Login>({
+  const [register, setRegister] = useState<Register>({
+    name: "Mateus Bosquetti",
     email: "mateushb123@gmail.com",
     password: "123",
+    cpf: "07756162900",
+    phone: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting login:", login);
-    router.push("/dashboard");
+
+    if (register.password !== confirmPassword) {
+      console.log("Passwords do not match");
+      return;
+    }
+
+    const token = await AuthService.register(register);
+    if (token) {
+      console.log("Registration successful, token:", token);
+      router.push("/dashboard");
+    } else {
+      console.log("Registration failed");
+    }
   };
 
   return (
@@ -32,10 +49,24 @@ export default function RegisterPage() {
         </div>
 
         <div className="text-center">
-          <h1 className="text-foreground text-2xl font-semibold">Acesse sua conta</h1>
+          <h1 className="text-foreground text-2xl font-semibold">Crie sua conta</h1>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-foreground">
+              Nome Completo
+            </Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Seu nome completo"
+              className="w-full"
+              required
+              value={register.name}
+              onChange={(e) => setRegister({ ...register, name: e.target.value })}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="email" className="text-foreground">
               Email
@@ -46,8 +77,8 @@ export default function RegisterPage() {
               placeholder="you@example.com"
               className="w-full"
               required
-              value={login.email}
-              onChange={(e) => setLogin({ ...login, email: e.target.value })}
+              value={register.email}
+              onChange={(e) => setRegister({ ...register, email: e.target.value })}
             />
           </div>
 
@@ -61,8 +92,22 @@ export default function RegisterPage() {
               placeholder="••••••••"
               className="w-full"
               required
-              value={login.password}
-              onChange={(e) => setLogin({ ...login, password: e.target.value })}
+              value={register.password}
+              onChange={(e) => setRegister({ ...register, password: e.target.value })}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirm-password" className="text-foreground">
+              Confirmar Senha
+            </Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              placeholder="••••••••"
+              className="w-full"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 
@@ -70,16 +115,16 @@ export default function RegisterPage() {
             type="submit"
             className="bg-foreground hover:bg-foreground/90 w-full text-white hover:cursor-pointer"
           >
-            Entrar
+            Cadastrar
           </Button>
         </form>
 
         <div className="text-center">
           <Link
-            href="/forgot-password"
+            href="/login"
             className="text-muted-foreground hover:text-foreground text-sm transition-colors"
           >
-            Esqueceu sua senha?
+            Já possui uma conta? Faça login
           </Link>
         </div>
       </div>
