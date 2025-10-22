@@ -14,6 +14,6 @@ export class AuthService {
   }
 
   public static async logout() {
-    await api.post("/auth/logout");
+    //TODO: Implement logout functionality
   }
 }

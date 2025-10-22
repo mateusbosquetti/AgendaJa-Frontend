@@ -33,7 +33,7 @@ export default function RegisterPage() {
     const token = await AuthService.register(register);
     if (token) {
       console.log("Registration successful, token:", token);
-      router.push("/dashboard");
+      router.push("/homepage");
     } else {
       console.log("Registration failed");
     }

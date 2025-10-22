@@ -23,7 +23,7 @@ export default function LoginPage() {
     const token = await AuthService.login(login);
     if (token) {
       console.log("Login successful, token:", token);
-      router.push("/dashboard");
+      router.push("/homepage");
     } else {
       console.log("Login failed");
     }
