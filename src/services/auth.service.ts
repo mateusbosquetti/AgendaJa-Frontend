@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
-import { Login } from "../types/login.type";
-import { Register } from "../types/register.type";
+import { Login } from "../types/auth/login.type";
+import { Register } from "../types/auth/register.type";
 
 export class AuthService {
   public static async login(dto: Login): Promise<string> {

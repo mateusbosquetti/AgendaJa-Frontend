@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthService } from "@/src/services/auth.service";
-import { Register } from "@/src/types/register.type";
+import { Register } from "@/src/types/auth/register.type";
 import Link from "next/link";
 
 export default function RegisterPage() {

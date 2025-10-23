@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
-import { Login } from "@/src/types/login.type";
+import { Login } from "@/src/types/auth/login.type";
 import { useRouter } from "next/navigation";
 import { AuthService } from "@/src/services/auth.service";
 
