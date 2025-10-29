@@ -46,7 +46,6 @@ function SearchResults() {
     : [];
 
   const handleItemClick = (item: string) => {
-    console.log(item);
     router.push(`/item/${encodeURIComponent(item.toLowerCase())}`);
   };
 

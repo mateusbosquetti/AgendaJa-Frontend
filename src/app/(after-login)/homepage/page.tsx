@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import SearchBar from "@/src/components/search-bar/search-bar";
 import { useUser } from "@/src/context/user-context";
 import { useRouter } from "next/navigation";
@@ -7,7 +8,7 @@ import { useContext } from "react";
 
 export default function HomePage() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, toggleTheme } = useUser();
   const mockData = [
     "Apple",
     "Banana",
@@ -36,11 +37,10 @@ export default function HomePage() {
           Bem vindo de volta, <span className="font-bold">{user?.name}</span>
         </h1>
         <p className="text-muted-foreground text-sm">{JSON.stringify(user, null, 2)}</p>
+        <Button onClick={toggleTheme}>Toggle Theme</Button>
         <SearchBar
           data={mockData}
           onSelect={(item) => {
-            console.log(item);
-
             router.push(`/item/${encodeURIComponent(item.toLowerCase())}`);
           }}
         />
