@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { UserMeResponse } from "../types/user/user-me-response.type";
 import { ThemeEnum } from "../enum/theme.enum";
+import { UserService } from "../services/user.service";
 
 interface UserContextType {
   user: UserMeResponse | null;
@@ -18,11 +19,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/me");
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-          document.documentElement.classList.toggle("dark", data.user.theme === ThemeEnum.DARK);
+        const res = await UserService.me();
+        if (res) {
+          setUser(res);
+          document.documentElement.classList.toggle("dark", res.theme === ThemeEnum.DARK);
         }
       } catch {
         setUser(null);
@@ -37,11 +37,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const newTheme = user.theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT;
     setUser({ ...user, theme: newTheme });
 
-    await fetch("/api/theme", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id, theme: newTheme }),
-    });
+    await UserService.updateTheme(user.id, newTheme);
 
     document.documentElement.classList.toggle("dark", newTheme === ThemeEnum.DARK);
   };
