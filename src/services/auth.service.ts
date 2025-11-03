@@ -21,6 +21,6 @@ export class AuthService {
   }
 
   public static async logout() {
-    //TODO: Implement logout functionality
+    Cookies.remove("token");
   }
 }

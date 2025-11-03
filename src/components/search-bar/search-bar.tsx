@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation";
 interface SearchBarProps {
   data: string[];
   onSelect: (item: string) => void;
+  onChange?: (item: string) => void;
 }
 
-export default function SearchBar({ data, onSelect }: SearchBarProps) {
+export default function SearchBar({ data, onSelect, onChange }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,8 +57,10 @@ export default function SearchBar({ data, onSelect }: SearchBarProps) {
             placeholder="Search for fruits..."
             value={searchQuery}
             onChange={(e) => {
-              setSearchQuery(e.target.value);
+              const value = e.target.value;
+              setSearchQuery(value);
               setIsOpen(true);
+              if (onChange) onChange(value);
             }}
             onKeyDown={handleKeyDown}
             className="border-foreground/10 focus-visible:ring-foreground/10 bg-background h-14 pr-12 pl-12 text-lg shadow-lg focus-visible:ring-1"
