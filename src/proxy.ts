@@ -5,19 +5,22 @@ export default function proxy(request: NextRequest) {
   const publicPaths = ["/login", "/register"];
 
   const path = request.nextUrl.pathname;
+  const token = request.cookies.get("token")?.value;
 
   if (path === "/") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  if (token && (path === "/login" || path === "/register")) {
+    return NextResponse.redirect(new URL("/homepage", request.url));
+  }
+
   if (publicPaths.includes(path)) {
     return NextResponse.next();
-  } else {
-    const token = request.cookies.get("token")?.value;
+  }
 
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 }
 

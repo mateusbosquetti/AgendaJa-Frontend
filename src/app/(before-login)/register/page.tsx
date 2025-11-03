@@ -16,8 +16,6 @@ export default function RegisterPage() {
     name: "Mateus Bosquetti",
     email: "mateushb123@gmail.com",
     password: "123",
-    cpf: "07756162900",
-    phone: "",
   });
 
   const [confirmPassword, setConfirmPassword] = useState("");
