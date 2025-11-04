@@ -7,4 +7,5 @@ export type UserMeResponse = {
   email: string;
   role: UserRole;
   theme: ThemeEnum;
+  photoUrl: string;
 };

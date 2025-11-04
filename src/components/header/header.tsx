@@ -81,7 +81,7 @@ export default function Header() {
           onClick={AuthService.logout}
         >
           <Image
-            src="https://api.dicebear.com/9.x/personas/svg?seed=Emery"
+            src={user?.photoUrl || "/default-profile.png"}
             alt="Profile"
             width={40}
             height={40}

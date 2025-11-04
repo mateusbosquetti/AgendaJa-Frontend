@@ -10,27 +10,7 @@ import { useEffect, useState } from "react";
 export default function HomePage() {
   const router = useRouter();
   const { user, toggleTheme } = useUser();
-  const mockData = [
-    "Apple",
-    "Banana",
-    "Cherry",
-    "Date",
-    "Elderberry",
-    "Fig",
-    "Grape",
-    "Honeydew",
-    "Kiwi",
-    "Lemon",
-    "Mango",
-    "Nectarine",
-    "Orange",
-    "Papaya",
-    "Raspberry",
-    "Strawberry",
-    "Tangerine",
-    "Watermelon",
-  ];
-
+  
   const [establishments, setEstablishments] = useState<string[]>([]);
   const [query, setQuery] = useState<string>("");
 
