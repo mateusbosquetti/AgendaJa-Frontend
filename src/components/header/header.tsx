@@ -80,14 +80,16 @@ export default function Header() {
           className="flex items-center"
           onClick={AuthService.logout}
         >
-          <Image
-            src={user?.photoUrl || "/default-profile.png"}
-            alt="Profile"
-            width={40}
-            height={40}
-            className="border-foreground/30 rounded-full border"
-            unoptimized
-          />
+          <div className="border-foreground/30 h-10 w-10 overflow-hidden rounded-full border">
+            <Image
+              src={user?.photoUrl || "/default-profile.png"}
+              alt="Profile"
+              width={40}
+              height={40}
+              className="h-full w-full object-cover"
+              unoptimized
+            />
+          </div>
         </Link>
       </nav>
     </header>
