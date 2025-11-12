@@ -42,8 +42,8 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/search?q=a" className="transition-colors hover:text-blue-700">
-              Buscar
+            <Link href="/explore" className="transition-colors hover:text-blue-700">
+              Explorar
             </Link>
           </li>
 
@@ -82,7 +82,7 @@ export default function Header() {
         >
           <div className="border-foreground/30 h-10 w-10 overflow-hidden rounded-full border">
             <Image
-              src={user?.photoUrl || "/default-profile.png"}
+              src={user?.photoUrl || "/default-profile-picture.png"}
               alt="Profile"
               width={40}
               height={40}

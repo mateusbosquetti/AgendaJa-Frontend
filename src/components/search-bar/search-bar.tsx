@@ -6,27 +6,36 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
+import { EstablishmentSummaryResponse } from "@/src/types/establishment/establishment-all-response.type";
+
+type idLabel = {
+  id: number;
+  label: string;
+};
 
 interface SearchBarProps {
-  data: string[];
-  onSelect: (item: string) => void;
-  onChange?: (item: string) => void;
+  data: idLabel[];
+  placeholder?: string;
+  onSelect: (id: number) => void;
+  onChange?: (query: string) => void;
 }
 
-export default function SearchBar({ data, onSelect, onChange }: SearchBarProps) {
+export default function SearchBar({ data, placeholder, onSelect, onChange }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
 
   const filteredResults = searchQuery.trim()
-    ? data.filter((item) => item.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 5)
+    ? data
+        .filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
+        .slice(0, 5)
     : [];
 
-  const handleItemClick = (item: string) => {
+  const handleItemClick = (item: idLabel) => {
     setSearchQuery("");
     setIsOpen(false);
-    onSelect(item);
+    onSelect(item.id);
   };
 
   const handleClearSearch = () => {
@@ -36,7 +45,7 @@ export default function SearchBar({ data, onSelect, onChange }: SearchBarProps) 
 
   const handleSeeAll = () => {
     if (searchQuery.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/explore`);
       setIsOpen(false);
     }
   };
@@ -54,7 +63,7 @@ export default function SearchBar({ data, onSelect, onChange }: SearchBarProps) 
           <Search className="text-foreground/40 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
           <Input
             type="text"
-            placeholder="Search for fruits..."
+            placeholder={placeholder || "Search..."}
             value={searchQuery}
             onChange={(e) => {
               const value = e.target.value;
@@ -93,7 +102,9 @@ export default function SearchBar({ data, onSelect, onChange }: SearchBarProps) 
                     className="hover:bg-foreground/5 group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:cursor-pointer"
                   >
                     <Search className="text-foreground/40 group-hover:text-foreground/60 h-4 w-4" />
-                    <span className="text-foreground/80 group-hover:text-foreground">{item}</span>
+                    <span className="text-foreground/80 group-hover:text-foreground">
+                      {item.label}
+                    </span>
                   </button>
                 ))}
               </div>
