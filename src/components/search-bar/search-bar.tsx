@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
-import { EstablishmentSummaryResponse } from "@/src/types/establishment/establishment-all-response.type";
 
 type idLabel = {
   id: number;
