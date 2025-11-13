@@ -1,19 +1,31 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import ProfessionalCard from "@/src/components/professional-card/professional-card";
 import ServiceCard from "@/src/components/service-card/service-card";
 import SliderOptions, { SliderOption } from "@/src/components/slider-option/slider-option";
+import { useUser } from "@/src/context/user-context";
+import { FunctionRole } from "@/src/enum/function-role.enum";
 import { EstablishmentService } from "@/src/services/establishment.service";
 import { EstablishmentResponse } from "@/src/types/establishment/establishment-response.type";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
+import { UserRole } from "@/src/enum/user-role.enum";
+import ProfessionalModal from "@/src/components/professional-modal/professional-modal";
+import ServiceModal from "@/src/components/service-modal/service-modal";
 
 export default function EstablishmentPage() {
   const params = useParams<{ id: string }>();
 
   const [establishment, setEstablishment] = useState<EstablishmentResponse | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | number>("services");
+  const [functionRole, setFunctionRole] = useState<FunctionRole | null>(null);
+  const { user } = useUser();
+
+  const [serviceModal, setServiceModal] = useState<boolean>(false);
+  const [professionalModal, setProfessionalModal] = useState<boolean>(false);
 
   const options: SliderOption[] = [
     {
@@ -30,18 +42,38 @@ export default function EstablishmentPage() {
     switch (selectedOption) {
       case "services":
         return (
-          <div className="grid grid-cols-1 gap-4">
-            {establishment?.services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
+          <div>
+            {(functionRole === FunctionRole.OWNER || user?.role === UserRole.ADMIN) && (
+              <div className="mb-4 flex justify-start">
+                <Button className="cursor-pointer gap-2" onClick={() => setServiceModal(true)}>
+                  <Plus className="h-4 w-4" />
+                  Novo Serviço
+                </Button>
+              </div>
+            )}
+            <div className="grid grid-cols-1 gap-4">
+              {establishment?.services.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              ))}
+            </div>
           </div>
         );
       case "professionals":
         return (
-          <div className="grid grid-cols-1 gap-4">
-            {establishment?.usersRelated.map((user) => (
-              <ProfessionalCard key={user.userId} userEstablishment={user} />
-            ))}
+          <div>
+            {(functionRole === FunctionRole.OWNER || user?.role === UserRole.ADMIN) && (
+              <div className="mb-4 flex justify-start">
+                <Button className="cursor-pointer gap-2" onClick={() => setProfessionalModal(true)}>
+                  <Plus className="h-4 w-4" />
+                  Novo Funcionário
+                </Button>
+              </div>
+            )}
+            <div className="grid grid-cols-1 gap-4">
+              {establishment?.usersRelated.map((user) => (
+                <ProfessionalCard key={user.userId} userEstablishment={user} />
+              ))}
+            </div>
           </div>
         );
       default:
@@ -51,13 +83,13 @@ export default function EstablishmentPage() {
 
   useEffect(() => {
     const fetchEstablishment = async () => {
-      EstablishmentService.getEstablishmentById(Number(params.id)).then((data) =>
-        setEstablishment(data)
-      );
+      const data = await EstablishmentService.getEstablishmentById(Number(params.id));
+      setEstablishment(data);
+      setFunctionRole(data.usersRelated.find((ur) => ur.userId === user?.id)?.role || null);
     };
 
     fetchEstablishment();
-  }, [params.id]);
+  }, [params.id, user?.id]);
 
   if (!establishment) {
     return <div>Loading...</div>;
@@ -73,6 +105,7 @@ export default function EstablishmentPage() {
           <p className="text-muted-foreground mb-2">
             {establishment.address.street}, {establishment.address.city}
           </p>
+          <p className="text-muted-foreground mb-2">Sua role: {functionRole}</p>
         </div>
         <div className="flex flex-col gap-2">
           <Image
@@ -115,6 +148,10 @@ export default function EstablishmentPage() {
         />
         <div className="mt-4">{renderContent()}</div>
       </div>
+
+      {serviceModal && <ServiceModal onClose={() => setServiceModal(false)} />}
+
+      {professionalModal && <ProfessionalModal onClose={() => setProfessionalModal(false)} />}
     </div>
   );
 }

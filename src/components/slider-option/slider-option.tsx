@@ -62,7 +62,7 @@ export default function SliderOptions({
               aria-selected={activeId === option.id}
               aria-controls={`panel-${option.id}`}
               onClick={() => handleOptionClick(option.id)}
-              className={`relative cursor-pointer px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors duration-200 ${
+              className={`relative cursor-pointer px-4 py-3 text-base font-medium whitespace-nowrap transition-colors duration-200 ${
                 activeId === option.id
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"

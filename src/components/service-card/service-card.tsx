@@ -6,7 +6,6 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
-  console.log(`Recebido: ${service}`);
   return (
     <div className="rounded-lg border p-4 shadow-sm">
       <h2 className="text-xl font-semibold">{service.name}</h2>
