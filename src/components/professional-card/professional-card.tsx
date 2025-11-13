@@ -6,8 +6,6 @@ interface ProfessionalCardProps {
 }
 
 export default function ProfessionalCard({ userEstablishment }: ProfessionalCardProps) {
-  console.log(`Recebido: ${userEstablishment}`);
-
   const translateRole = (role: FunctionRole) => {
     switch (role) {
       case FunctionRole.OWNER:

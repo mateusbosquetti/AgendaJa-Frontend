@@ -15,6 +15,7 @@ import { Plus } from "lucide-react";
 import { UserRole } from "@/src/enum/user-role.enum";
 import ProfessionalModal from "@/src/components/professional-modal/professional-modal";
 import ServiceModal from "@/src/components/service-modal/service-modal";
+import { ServiceResponse } from "@/src/types/service/service-response.type";
 
 export default function EstablishmentPage() {
   const params = useParams<{ id: string }>();
@@ -25,6 +26,18 @@ export default function EstablishmentPage() {
   const { user } = useUser();
 
   const [serviceModal, setServiceModal] = useState<boolean>(false);
+  const [serviceOnModal, setServiceOnModal] = useState<ServiceResponse | null>(null);
+
+  const handleOpenServiceModal = (service?: ServiceResponse) => {
+    setServiceModal(true);
+    setServiceOnModal(service || null);
+  };
+
+  const handleCloseServiceModal = () => {
+    setServiceModal(false);
+    setServiceOnModal(null);
+  };
+
   const [professionalModal, setProfessionalModal] = useState<boolean>(false);
 
   const options: SliderOption[] = [
@@ -45,7 +58,7 @@ export default function EstablishmentPage() {
           <div>
             {(functionRole === FunctionRole.OWNER || user?.role === UserRole.ADMIN) && (
               <div className="mb-4 flex justify-start">
-                <Button className="cursor-pointer gap-2" onClick={() => setServiceModal(true)}>
+                <Button className="cursor-pointer gap-2" onClick={() => handleOpenServiceModal()}>
                   <Plus className="h-4 w-4" />
                   Novo Serviço
                 </Button>
@@ -149,7 +162,13 @@ export default function EstablishmentPage() {
         <div className="mt-4">{renderContent()}</div>
       </div>
 
-      {serviceModal && <ServiceModal onClose={() => setServiceModal(false)} />}
+      {serviceModal && (
+        <ServiceModal
+          onClose={handleCloseServiceModal}
+          service={serviceOnModal}
+          establishmentId={establishment.id}
+        />
+      )}
 
       {professionalModal && <ProfessionalModal onClose={() => setProfessionalModal(false)} />}
     </div>

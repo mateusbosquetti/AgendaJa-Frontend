@@ -19,8 +19,6 @@ export default function Header() {
     const fetchEstablishments = async () => {
       if (user) {
         UserEstablishmentService.getEstablishmentRelationsByUserId(user.id).then((data) => {
-          console.log(JSON.stringify(data, null, 2));
-
           setEstablishmentsRelatedToUser(data);
         });
       }

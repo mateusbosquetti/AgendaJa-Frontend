@@ -96,9 +96,7 @@ export default function EstablishmentForm({ id }: EstablishmentFormProps) {
     try {
       // Submit form data to API
       const payload: EstablishmentRequest = { ...data, ownerId: user?.id || 0 };
-      EstablishmentService.createEstablishment(payload).then((response) => {
-        console.log("Establishment created:", response);
-      });
+      EstablishmentService.createEstablishment(payload).then((response) => {});
     } catch (error) {
       setSubmitError("Failed to submit form. Please try again.");
     } finally {

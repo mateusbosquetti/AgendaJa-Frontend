@@ -46,8 +46,6 @@ export default function SliderOptions({
     onOptionChange?.(id);
   };
 
-  const activeOption = options.find((opt) => opt.id === activeId);
-
   return (
     <div className="w-full">
       <div className="border-border relative border-b">
