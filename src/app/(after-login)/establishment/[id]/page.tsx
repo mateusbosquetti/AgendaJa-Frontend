@@ -1,5 +1,7 @@
 "use client";
 
+import ProfessionalCard from "@/src/components/professional-card/professional-card";
+import ServiceCard from "@/src/components/service-card/service-card";
 import SliderOptions, { SliderOption } from "@/src/components/slider-option/slider-option";
 import { EstablishmentService } from "@/src/services/establishment.service";
 import { EstablishmentResponse } from "@/src/types/establishment/establishment-response.type";
@@ -27,9 +29,21 @@ export default function EstablishmentPage() {
   const renderContent = () => {
     switch (selectedOption) {
       case "services":
-        return <div>Conteúdo de Serviços</div>;
+        return (
+          <div className="grid grid-cols-1 gap-4">
+            {establishment?.services.map((service) => (
+              <ServiceCard key={service.id} service={service} />
+            ))}
+          </div>
+        );
       case "professionals":
-        return <div>Conteúdo de Profissionais</div>;
+        return (
+          <div className="grid grid-cols-1 gap-4">
+            {establishment?.usersRelated.map((user) => (
+              <ProfessionalCard key={user.userId} userEstablishment={user} />
+            ))}
+          </div>
+        );
       default:
         return null;
     }
@@ -54,7 +68,11 @@ export default function EstablishmentPage() {
       <div className="grid grid-cols-2">
         <div className="">
           <h1 className="mb-4 text-3xl font-bold">{establishment.name}</h1>
+          <p className="text-muted-foreground mb-2">{establishment.description}</p>
           <p className="text-muted-foreground mb-2">{establishment.cnpj}</p>
+          <p className="text-muted-foreground mb-2">
+            {establishment.address.street}, {establishment.address.city}
+          </p>
         </div>
         <div className="flex flex-col gap-2">
           <Image
