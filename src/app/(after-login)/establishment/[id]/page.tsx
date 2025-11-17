@@ -34,6 +34,7 @@ export default function EstablishmentPage() {
   };
 
   const handleCloseServiceModal = () => {
+    refreshData();
     setServiceModal(false);
     setServiceOnModal(null);
   };
@@ -103,6 +104,15 @@ export default function EstablishmentPage() {
 
     fetchEstablishment();
   }, [params.id, user?.id]);
+
+  const refreshData = () => {
+    const fetchEstablishment = async () => {
+      const data = await EstablishmentService.getEstablishmentById(Number(params.id));
+      setEstablishment(data);
+    };
+
+    fetchEstablishment();
+  };
 
   if (!establishment) {
     return <div>Loading...</div>;
