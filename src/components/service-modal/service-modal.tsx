@@ -169,10 +169,12 @@ export default function ServiceModal({ onClose, service, establishmentId }: Serv
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
-              <Button type="button" variant="outline" onClick={onClose}>
+              <Button className="cursor-pointer" type="button" variant="outline" onClick={onClose}>
                 Cancelar
               </Button>
-              <Button type="submit">{service ? "Salvar" : "Criar"}</Button>
+              <Button className="cursor-pointer" type="submit">
+                {service ? "Salvar" : "Criar"}
+              </Button>
             </div>
           </form>
         </Form>
