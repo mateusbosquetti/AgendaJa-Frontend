@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Header() {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const [establishmentsRelatedToUser, setEstablishmentsRelatedToUser] = useState<
     UserEstablishmentResponseDTO[]
   >([]);
@@ -76,7 +76,10 @@ export default function Header() {
           // href="/profile"
           href=""
           className="flex items-center"
-          onClick={AuthService.logout}
+          onClick={() => {
+            setUser(null);
+            AuthService.logout();
+          }}
         >
           <div className="border-foreground/30 h-10 w-10 overflow-hidden rounded-full border">
             <Image

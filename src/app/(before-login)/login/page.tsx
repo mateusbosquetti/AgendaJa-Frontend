@@ -30,9 +30,9 @@ export default function LoginPage() {
 
   return (
     <div className="bg-background flex min-h-screen items-center justify-center px-4">
-      <div className="bg-card w-full max-w-md space-y-6 rounded-2xl p-6 shadow-lg">
+      <div className="w-full max-w-md space-y-6 rounded-2xl p-6 shadow-lg">
         <div className="flex justify-center">
-          <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-full">
+          <div className="bg-background flex h-16 w-16 items-center justify-center rounded-full">
             <User className="text-foreground h-8 w-8" />
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="bg-foreground hover:bg-foreground/90 w-full text-white hover:cursor-pointer"
+            className="bg-foreground hover:bg-foreground/90 text-background w-full hover:cursor-pointer"
           >
             Entrar
           </Button>

@@ -180,7 +180,12 @@ export default function EstablishmentPage() {
         />
       )}
 
-      {professionalModal && <ProfessionalModal onClose={() => setProfessionalModal(false)} />}
+      {professionalModal && (
+        <ProfessionalModal
+          onClose={() => setProfessionalModal(false)}
+          establishmentId={establishment.id}
+        />
+      )}
     </div>
   );
 }
