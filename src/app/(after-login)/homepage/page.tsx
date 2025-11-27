@@ -1,19 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import EstablishmentCard from "@/src/components/establishment/card/establishment-card";
 import SearchBar from "@/src/components/search-bar/search-bar";
 import { useUser } from "@/src/context/user-context";
 import { EstablishmentService } from "@/src/services/establishment.service";
-import {
-  EstablishmentSummaryResponse,
-} from "@/src/types/establishment/establishment-all-response.type";
+import { EstablishmentSummaryResponse } from "@/src/types/establishment/establishment-all-response.type";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const router = useRouter();
-  const { user, toggleTheme } = useUser();
+  const { user } = useUser();
 
   const [establishments, setEstablishments] = useState<EstablishmentSummaryResponse[]>([]);
   const [establishmentsQuery, setEstablishmentsQuery] = useState<EstablishmentSummaryResponse[]>(
@@ -45,10 +42,8 @@ export default function HomePage() {
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl">
-          Bem vindo de volta, <span className="font-bold">{user?.name}</span>
+          Bem vindo de volta, <span className="text-accent font-bold">{user?.name}</span>
         </h1>
-        <p className="text-muted-foreground text-sm">{JSON.stringify(user, null, 2)}</p>
-        <Button onClick={toggleTheme}>Toggle Theme</Button>
         <SearchBar
           data={establishmentsQuery.map((establishment) => ({
             id: establishment.id,

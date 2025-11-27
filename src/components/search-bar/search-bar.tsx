@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ArrowRight, Search, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useRouter } from "next/navigation";
 
 type idLabel = {
@@ -22,8 +19,21 @@ interface SearchBarProps {
 export default function SearchBar({ data, placeholder, onSelect, onChange }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+
+  // Fecha o dropdown quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const filteredResults = searchQuery.trim()
     ? data
@@ -37,14 +47,9 @@ export default function SearchBar({ data, placeholder, onSelect, onChange }: Sea
     onSelect(item.id);
   };
 
-  const handleClearSearch = () => {
-    setSearchQuery("");
-    setIsOpen(false);
-  };
-
   const handleSeeAll = () => {
     if (searchQuery.trim()) {
-      router.push(`/explore`);
+      router.push(`/explore?q=${encodeURIComponent(searchQuery)}`);
       setIsOpen(false);
     }
   };
@@ -52,83 +57,73 @@ export default function SearchBar({ data, placeholder, onSelect, onChange }: Sea
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
       handleSeeAll();
+    } else if (e.key === "Escape") {
+      setIsOpen(false);
     }
   };
 
   return (
-    <Popover open={isOpen && searchQuery.trim() !== ""} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <div className="relative">
-          <Search className="text-foreground/40 absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2" />
-          <Input
-            type="text"
-            placeholder={placeholder || "Search..."}
-            value={searchQuery}
-            onChange={(e) => {
-              const value = e.target.value;
-              setSearchQuery(value);
-              setIsOpen(true);
-              if (onChange) onChange(value);
-            }}
-            onKeyDown={handleKeyDown}
-            className="border-foreground/10 focus-visible:ring-foreground/10 bg-background h-14 pr-12 pl-12 text-lg shadow-lg focus-visible:ring-1"
-          />
-          {searchQuery && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleClearSearch}
-              className="hover:bg-foreground/5 absolute top-1/2 right-2 h-8 w-8 -translate-y-1/2 hover:cursor-pointer"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      </PopoverTrigger>
-      <PopoverContent
-        className="border-foreground/10 w-(--radix-popover-trigger-width) p-0"
-        align="start"
-        onOpenAutoFocus={(e) => e.preventDefault()}
-      >
-        <div className="max-h-[400px] overflow-y-auto">
+    <div className="relative w-full" ref={searchRef}>
+      <label className="input input-bordered flex w-full items-center gap-2">
+        <Search className="h-4 w-4 opacity-70" />
+        <input
+          type="search"
+          placeholder={placeholder || "Buscar..."}
+          value={searchQuery}
+          onChange={(e) => {
+            const value = e.target.value;
+            setSearchQuery(value);
+            setIsOpen(value.trim().length > 0);
+            if (onChange) onChange(value);
+          }}
+          onFocus={() => {
+            if (searchQuery.trim()) setIsOpen(true);
+          }}
+          onKeyDown={handleKeyDown}
+          className="grow"
+        />
+      </label>
+
+      {isOpen && searchQuery.trim() && (
+        <div className="border-base-300 bg-base-100 absolute z-50 mt-2 w-full rounded-lg border shadow-xl">
           {filteredResults.length > 0 ? (
             <>
-              <div className="py-2">
+              <ul className="menu menu-compact w-full">
                 {filteredResults.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleItemClick(item)}
-                    className="hover:bg-foreground/5 group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:cursor-pointer"
-                  >
-                    <Search className="text-foreground/40 group-hover:text-foreground/60 h-4 w-4" />
-                    <span className="text-foreground/80 group-hover:text-foreground">
-                      {item.label}
-                    </span>
-                  </button>
+                  <li key={item.id}>
+                    <button
+                      onClick={() => handleItemClick(item)}
+                      className="flex w-full items-center gap-3"
+                    >
+                      <Search className="h-4 w-4 opacity-60" />
+                      <span className="flex-1 text-left">{item.label}</span>
+                    </button>
+                  </li>
                 ))}
-              </div>
-              <div className="border-foreground/10 border-t py-2">
+              </ul>
+
+              <div className="divider my-0"></div>
+
+              <div className="p-2">
                 <button
                   onClick={handleSeeAll}
-                  className="hover:bg-foreground/5 group flex w-full items-center justify-between px-4 py-3 text-left transition-colors hover:cursor-pointer"
+                  className="flex w-full cursor-pointer items-center justify-between rounded-sm p-2"
                 >
-                  <span className="text-foreground/60 group-hover:text-foreground text-sm font-medium">
-                    See all results for "{searchQuery}"
+                  <span className="text-sm font-medium">
+                    Ver todos os resultados para "{searchQuery}"
                   </span>
-                  <ArrowRight className="text-foreground/40 group-hover:text-foreground/60 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
             </>
           ) : (
-            <div className="text-foreground/50 px-4 py-8 text-center">
-              <p className="text-sm">No results found for "{searchQuery}"</p>
-              <p className="text-foreground/40 mt-1 text-xs">
-                Try searching for different keywords
-              </p>
+            <div className="p-8 text-center">
+              <p className="text-sm opacity-70">Nenhum resultado encontrado para "{searchQuery}"</p>
+              <p className="mt-1 text-xs opacity-50">Tente buscar por palavras-chave diferentes</p>
             </div>
           )}
         </div>
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
   );
 }

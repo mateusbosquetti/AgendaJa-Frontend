@@ -2,33 +2,9 @@
 
 import { ServiceResponse } from "@/src/types/service/service-response.type";
 import { X } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
 import { ServiceRequest } from "@/src/types/service/service-request.type";
-import { ServicePUTRequest } from "@/src/types/service/service-put-request.type";
 import { ServiceService } from "@/src/services/service.service";
-
-const serviceFormSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
-  description: z.string().min(1, "Descrição é obrigatória"),
-  durationMinutes: z.number().min(1, "Duração deve ser maior que 0"),
-  price: z.number().min(0, "Preço deve ser maior ou igual a 0"),
-});
-
-type ServiceFormValues = z.infer<typeof serviceFormSchema>;
 
 interface ServiceModalProps {
   onClose: () => void;
@@ -37,28 +13,20 @@ interface ServiceModalProps {
 }
 
 export default function ServiceModal({ onClose, service, establishmentId }: ServiceModalProps) {
-  const form = useForm<ServiceFormValues>({
-    resolver: zodResolver(serviceFormSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      durationMinutes: 0,
-      price: 0,
-    },
-  });
+      // name: "",
+      // description: "",
+      // durationMinutes: 0,
+      // price: 0,
+
+  
 
   useEffect(() => {
     if (service) {
-      form.reset({
-        name: service.name,
-        description: service.description,
-        durationMinutes: service.durationMinutes,
-        price: service.price,
-      });
-    }
-  }, [service, form]);
 
-  const onSubmit = async (data: ServiceFormValues) => {
+    }
+  }, [service]);
+
+  const onSubmit = async (data: any) => {
     const payload: ServiceRequest = {
       ...data,
       establishmentId,
@@ -97,7 +65,8 @@ export default function ServiceModal({ onClose, service, establishmentId }: Serv
           </p>
         </div>
 
-        <Form {...form}>
+
+        {/* <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 space-y-4">
             <FormField
               control={form.control}
@@ -177,7 +146,7 @@ export default function ServiceModal({ onClose, service, establishmentId }: Serv
               </Button>
             </div>
           </form>
-        </Form>
+        </Form> */}
       </div>
     </div>
   );

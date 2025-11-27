@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import ProfessionalCard from "@/src/components/professional-card/professional-card";
 import ServiceCard from "@/src/components/service-card/service-card";
 import SliderOptions, { SliderOption } from "@/src/components/slider-option/slider-option";
@@ -59,10 +58,10 @@ export default function EstablishmentPage() {
           <div>
             {(functionRole === FunctionRole.OWNER || user?.role === UserRole.ADMIN) && (
               <div className="mb-4 flex justify-start">
-                <Button className="cursor-pointer gap-2" onClick={() => handleOpenServiceModal()}>
+                <button className="cursor-pointer gap-2" onClick={() => handleOpenServiceModal()}>
                   <Plus className="h-4 w-4" />
                   Novo Serviço
-                </Button>
+                </button>
               </div>
             )}
             <div className="grid grid-cols-1 gap-4">
@@ -77,10 +76,10 @@ export default function EstablishmentPage() {
           <div>
             {(functionRole === FunctionRole.OWNER || user?.role === UserRole.ADMIN) && (
               <div className="mb-4 flex justify-start">
-                <Button className="cursor-pointer gap-2" onClick={() => setProfessionalModal(true)}>
+                <button className="cursor-pointer gap-2" onClick={() => setProfessionalModal(true)}>
                   <Plus className="h-4 w-4" />
                   Novo Funcionário
-                </Button>
+                </button>
               </div>
             )}
             <div className="grid grid-cols-1 gap-4">
