@@ -9,7 +9,7 @@ export default function AfterLoginLayout({ children }: { children: React.ReactNo
     <UserProvider>
       <div className="bg-background flex min-h-screen flex-col">
         <Header />
-        <main className="flex-1 px-48 py-24">
+        <main className="flex-1 px-4 py-6 md:px-16 md:py-8 lg:px-48 lg:py-16">
           {children}
           <ThemeSwapper />
         </main>
